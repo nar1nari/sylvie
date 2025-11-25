@@ -63,6 +63,8 @@ pub async fn memory(ctx: Context<'_>) -> Result<(), Error> {
     let guild_id = ctx.guild_id().unwrap().get();
     let history = load_memory(guild_id);
 
+    ctx.defer().await?;
+
     if history.is_empty() {
         reply_without_ping(ctx, tr!(ctx, "memory-empty")).await?;
         return Ok(());
