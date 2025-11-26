@@ -105,15 +105,7 @@ async fn help_single_command(ctx: Context<'_>, command_name: &str) -> Result<Cre
             .color(HELP_EMBED_COLOR)
             .title(command_name);
 
-        embed = if command.description.is_some() {
-            embed.field(
-                "",
-                translation::get(ctx, &command.name, Some("description"), None),
-                false,
-            )
-        } else {
-            embed.field("", tr!(ctx, "help-no-description"), false)
-        };
+        embed = embed.description(translation::get(ctx, &command.name, Some("help"), None));
 
         let mut params = HashMap::<String, String>::new();
         for param in &command.parameters {
