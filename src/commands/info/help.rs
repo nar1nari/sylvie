@@ -101,7 +101,9 @@ async fn help_single_command(ctx: Context<'_>, command_name: &str) -> Result<Cre
         command = Some(c);
     }
     let embed = if let Some(command) = command {
-        let mut embed = CreateEmbed::new().title(command_name);
+        let mut embed = CreateEmbed::new()
+            .color(HELP_EMBED_COLOR)
+            .title(command_name);
 
         embed = if command.description.is_some() {
             embed.field(
@@ -170,11 +172,14 @@ async fn help_single_command(ctx: Context<'_>, command_name: &str) -> Result<Cre
 
         embed
     } else {
-        CreateEmbed::new().title(tr!(ctx, "help-title")).field(
-            tr!(ctx, "help-not-found"),
-            tr!(ctx, "help-not-found-description", command: command_name),
-            false,
-        )
+        CreateEmbed::new()
+            .color(ERROR_EMBED_COLOR)
+            .title(tr!(ctx, "help-title"))
+            .field(
+                tr!(ctx, "help-not-found"),
+                tr!(ctx, "help-not-found-description", command: command_name),
+                false,
+            )
     };
 
     Ok(embed)
@@ -198,7 +203,9 @@ async fn help_all_commands(ctx: Context<'_>) -> Result<CreateEmbed, Error> {
         .map(|cmd| (cmd.name.clone(), cmd.id))
         .collect();
 
-    let mut embed = CreateEmbed::new().title(tr!(ctx, "help-title"));
+    let mut embed = CreateEmbed::new()
+        .color(HELP_EMBED_COLOR)
+        .title(tr!(ctx, "help-title"));
 
     for (category_name, commands) in categories {
         let commands = commands

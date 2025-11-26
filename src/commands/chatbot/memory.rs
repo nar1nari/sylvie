@@ -60,6 +60,7 @@ fn build_page(history: &[String], page: usize) -> String {
 
 fn create_embed(ctx: Context<'_>, desc: &str, page: usize, max_page: usize) -> CreateEmbed {
     CreateEmbed::new()
+        .color(DEFAULT_EMBED_COLOR)
         .title(tr!(ctx, "memory-title"))
         .description(desc)
         .footer(CreateEmbedFooter::new(
@@ -91,6 +92,7 @@ pub async fn memory(ctx: Context<'_>, index: Option<usize>) -> Result<(), Error>
             && index > 0
         {
             let embed = CreateEmbed::new()
+                .color(DEFAULT_EMBED_COLOR)
                 .title(tr!(ctx, "memory-single-title", index: index))
                 .description(format_message(msg, false));
             ctx.send(CreateReply::default().embed(embed).reply(true))

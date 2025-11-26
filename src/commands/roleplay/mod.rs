@@ -1,6 +1,6 @@
 use poise::{
     CreateReply,
-    serenity_prelude::{self as serenity, CreateEmbed, colours::roles::DARK_GREEN},
+    serenity_prelude::{self as serenity, CreateEmbed},
 };
 use rand::seq::IndexedRandom;
 use reqwest::StatusCode;
@@ -86,7 +86,7 @@ pub async fn run_rp_action(
         return Ok(());
     }
 
-    let mut embed = CreateEmbed::new().image(gif).color(DARK_GREEN);
+    let mut embed = CreateEmbed::new().color(DEFAULT_EMBED_COLOR).image(gif);
 
     embed = if &target == ctx.author() {
         embed.title(action.msg_no_target(ctx, ctx.author().display_name()))
