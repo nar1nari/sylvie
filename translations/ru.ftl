@@ -73,10 +73,15 @@ restart-not = ⛔ Перезапуск не требуется.
 
 memory = память
     .description = 💾 Просмотр постоянной памяти
+    .index = индекс
+    .index-description = Индекс сообщения
 
 memory-title = Записи в постоянной памяти:
+memory-single-title = Сообщение с индексом {$index}
+memory-single-not-found = ⛔ Сообщения с таким индексом нет.
 memory-empty = Память пуста.
-memory-footer = Используйте `s.forget ID`, чтобы удалить запись.
+memory-footer = Используйте `s.memory ID` чтобы получить конкретное сообщение.
+    Используйте `s.forget ID`, чтобы удалить запись.
     Страница {$page} из {$max_page}
 
 clear = очистить

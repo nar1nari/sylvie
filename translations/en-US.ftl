@@ -73,10 +73,15 @@ restart-not = ⛔ No restart needed.
 
 memory = memory
     .description = 💾 View persistent memory
+    .index = index
+    .index-description = Index of a message
 
 memory-title = Messages in persistent memory:
+memory-single-title = Message with index {$index}
+memory-single-not-found = ⛔ A message with this index doesn't exist.
 memory-empty = Memory is empty.
-memory-footer = Use `s.forget ID` to delete a memory entry.
+memory-footer = Use `s.memory ID` to get specific message.
+    Use `s.forget ID` to delete a memory entry.
     Page {$page} of {$max_page}
 
 clear = clear

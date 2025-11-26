@@ -25,15 +25,25 @@ fn load_memory(guild_id: u64) -> Vec<String> {
         .unwrap_or_default()
 }
 
-fn format_message(msg: &str) -> String {
-    if let Some((prefix, text)) = msg.split_once(">: ")
+fn format_message(msg: &str, crop: bool) -> String {
+    let formatted = if let Some((prefix, text)) = msg.split_once(">: ")
         && let Some(id) = prefix.split(':').next_back()
     {
         let id = id.trim_matches(&['<', '>'][..]);
-        return format!("<@{}>: {}", id, text);
-    }
+        format!("<@{}>: {}", id, text)
+    } else {
+        msg.to_string()
+    };
 
-    msg.to_string()
+    const LIMIT: usize = 200;
+
+    if crop && formatted.len() > LIMIT {
+        let mut cut = formatted.chars().take(LIMIT).collect::<String>();
+        cut.push('…');
+        cut
+    } else {
+        formatted
+    }
 }
 
 fn build_page(history: &[String], page: usize) -> String {
@@ -43,7 +53,7 @@ fn build_page(history: &[String], page: usize) -> String {
     history[start..end]
         .iter()
         .enumerate()
-        .map(|(i, msg)| format!("{}. {}", start + i + 1, format_message(msg)))
+        .map(|(i, msg)| format!("{}. {}", start + i + 1, format_message(msg, true)))
         .collect::<Vec<_>>()
         .join("\n")
 }
@@ -57,8 +67,14 @@ fn create_embed(ctx: Context<'_>, desc: &str, page: usize, max_page: usize) -> C
         ))
 }
 
-#[poise::command(slash_command, prefix_command, guild_only, aliases("mem"), category = "Chatbot")]
-pub async fn memory(ctx: Context<'_>) -> Result<(), Error> {
+#[poise::command(
+    slash_command,
+    prefix_command,
+    guild_only,
+    aliases("mem"),
+    category = "Chatbot"
+)]
+pub async fn memory(ctx: Context<'_>, index: Option<usize>) -> Result<(), Error> {
     let uuid = ctx.id();
     let guild_id = ctx.guild_id().unwrap().get();
     let history = load_memory(guild_id);
@@ -67,6 +83,21 @@ pub async fn memory(ctx: Context<'_>) -> Result<(), Error> {
 
     if history.is_empty() {
         reply_without_ping(ctx, tr!(ctx, "memory-empty")).await?;
+        return Ok(());
+    }
+
+    if let Some(index) = index {
+        if let Some(msg) = history.get(index.saturating_sub(1))
+            && index > 0
+        {
+            let embed = CreateEmbed::new()
+                .title(tr!(ctx, "memory-single-title", index: index))
+                .description(format_message(msg, false));
+            ctx.send(CreateReply::default().embed(embed).reply(true))
+                .await?;
+        } else {
+            reply_without_ping(ctx, tr!(ctx, "memory-single-not-found")).await?;
+        }
         return Ok(());
     }
 
