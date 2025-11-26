@@ -1,3 +1,5 @@
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use gem_rs::{
     client::GemSession,
     errors::GemError,
@@ -7,6 +9,7 @@ use gem_rs::{
 pub struct Agent {
     session: GemSession,
     settings: Settings,
+    last_interaction: u64,
 }
 
 impl Agent {
@@ -19,7 +22,15 @@ impl Agent {
         settings.set_all_safety_settings(HarmBlockThreshold::BlockNone);
         settings.set_system_instruction(system_message);
         settings.set_thinking_budget(0);
-        Self { session, settings }
+        let last_interaction = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
+        Self {
+            session,
+            settings,
+            last_interaction,
+        }
     }
 
     pub async fn chat(
@@ -27,6 +38,8 @@ impl Agent {
         input: &str,
         attachment: Option<FileData>,
     ) -> Result<String, GemError> {
+        self.update_last_interaction();
+
         let msg = match attachment {
             Some(data) => {
                 self.session
@@ -45,5 +58,29 @@ impl Agent {
             .first()
             .unwrap_or(&"".to_string())
             .to_owned())
+    }
+
+    pub fn set_last_interaction(&mut self, time: u64) {
+        self.last_interaction = time;
+    }
+
+    pub fn last_interaction(&self) -> u64 {
+        self.last_interaction
+    }
+
+    pub fn time_since_last_interaction(&self) -> u64 {
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
+        now.saturating_sub(self.last_interaction())
+    }
+
+    pub fn update_last_interaction(&mut self) {
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
+        self.set_last_interaction(now);
     }
 }

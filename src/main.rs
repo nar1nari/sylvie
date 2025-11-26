@@ -42,7 +42,10 @@ async fn main() {
         .with(EnvFilter::new("info,gem_rs=off"))
         .with(fmt::layer())
         .init();
+
     ai::init_agents().await;
+
+    tokio::spawn(ai::core::clear_agents_task());
 
     let translations = translation::read_ftl().expect("failed to read translation files");
     let mut registered_commands = base_commands();

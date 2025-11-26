@@ -1,4 +1,4 @@
-use std::{fs, io, path::Path};
+use std::{fs, io, path::Path, time::Duration};
 
 use gem_rs::types::{FileData, FileManager};
 use serde_json::{Value, json};
@@ -194,4 +194,16 @@ pub async fn remove_agent(guild_id: u64) -> io::Result<Agent> {
     agents
         .remove(&guild_id)
         .ok_or(io::Error::new(io::ErrorKind::NotFound, "agent not found"))
+}
+
+async fn clear_old_agents() {
+    let mut agents = agents().await;
+    agents.retain(|_, agent| agent.time_since_last_interaction() <= 3600);
+}
+
+pub async fn clear_agents_task() {
+    loop {
+        clear_old_agents().await;
+        tokio::time::sleep(Duration::from_secs(60)).await;
+    }
 }
