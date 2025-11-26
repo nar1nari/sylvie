@@ -48,8 +48,15 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
+          set -e
           ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
           echo "Performing deploy..."
           rsync -avz --delete ./target/release/sylvie "${SSH_USER}@${SSH_HOST}":/home/anon/sylvie/sylvie
-          rsync -avz --delete ./translations "${SSH_USER}@${SSH_HOST}":/home/anon/sylvie/translations
+          rsync -avz --delete ./translations "${SSH_USER}@${SSH_HOST}":/home/anon/sylvie/
+
+          echo "Launching bot..."
+          ssh "${SSH_USER}@${SSH_HOST}" '
+            tmux kill-session -t sylv 2>/dev/null || true
+            tmux new-session -d -s sylv "bash -lc '\''cd /home/anon/sylvie && ./sylvie'\''"
+          '
