@@ -126,11 +126,7 @@ async fn help_single_command(ctx: Context<'_>, command_name: &str) -> Result<Cre
             );
             params.insert(name, desc);
         }
-        let param_names = params
-            .keys()
-            .map(|k| k.clone())
-            .collect::<Vec<_>>()
-            .join(" ");
+        let param_names = params.keys().cloned().collect::<Vec<_>>().join(" ");
 
         let mut invocations = Vec::new();
         if command.slash_action.is_some() {
