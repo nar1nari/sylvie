@@ -57,7 +57,7 @@ help-footer = Commands can be invoked with `/` or `s.`
     Use `/help [command]` for detailed information.
 
 ask = ask
-    .description = 💬 Ask the chatbot
+    .description = 💬 Talk to me
     .text = text
     .text-description = Text to send
     .help = Talk to me.
