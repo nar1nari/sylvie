@@ -77,7 +77,7 @@ pub async fn run_rp_action(
     };
 
     if action.needs_target && &target == ctx.author() {
-        reply_without_ping(ctx, tr!(ctx, "rp-need-target")).await?;
+        reply_with_error(ctx, tr!(ctx, "rp-need-target")).await?;
         return Ok(());
     }
 

@@ -30,7 +30,7 @@ pub async fn cat(ctx: Context<'_>) -> Result<(), Error> {
     if let Some(url) = data[0]["url"].as_str() {
         reply_without_ping(ctx, url).await?;
     } else {
-        reply_without_ping(ctx, error_msg).await?;
+        reply_with_error(ctx, error_msg).await?;
     }
 
     Ok(())

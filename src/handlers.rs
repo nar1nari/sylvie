@@ -6,7 +6,7 @@ pub async fn error_handler(
 ) {
     match error {
         poise::FrameworkError::ArgumentParse { ctx, .. } => {
-            reply_without_ping(
+            reply_with_error(
                 ctx,
                 format!(":broken_chain: {}", tr!(ctx, "argument-parse-error")),
             )
@@ -14,7 +14,7 @@ pub async fn error_handler(
             .ok();
         }
         poise::FrameworkError::NsfwOnly { ctx, .. } => {
-            reply_without_ping(ctx, format!(":underage: {}", tr!(ctx, "nsfw-error")))
+            reply_with_error(ctx, format!(":underage: {}", tr!(ctx, "nsfw-error")))
                 .await
                 .ok();
         }
@@ -28,7 +28,7 @@ pub async fn error_handler(
                 .iter()
                 .map(|i| format!("{}, ", i))
                 .collect();
-            reply_without_ping(
+            reply_with_error(
                 ctx,
                 format!(
                     ":scales: {}",
@@ -47,7 +47,7 @@ pub async fn error_handler(
                 .iter()
                 .map(|i| format!("{}, ", i))
                 .collect();
-            reply_without_ping(
+            reply_with_error(
                 ctx,
                 format!(
                     ":scales: {}",
@@ -58,7 +58,7 @@ pub async fn error_handler(
             .ok();
         }
         poise::FrameworkError::GuildOnly { ctx, .. } => {
-            reply_without_ping(ctx, format!(":lock: {}", tr!(ctx, "guild-only-error")))
+            reply_with_error(ctx, format!(":lock: {}", tr!(ctx, "guild-only-error")))
                 .await
                 .ok();
         }

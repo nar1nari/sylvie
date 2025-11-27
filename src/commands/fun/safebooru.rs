@@ -61,7 +61,7 @@ pub async fn safebooru(ctx: Context<'_>, #[rest] tags: Option<String>) -> Result
             reply_without_ping(ctx, url).await?;
         }
         Err(msg) => {
-            reply_without_ping(ctx, msg).await?;
+            reply_with_error(ctx, msg).await?;
         }
     }
 
