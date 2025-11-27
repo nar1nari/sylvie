@@ -191,7 +191,7 @@ sleep-no-target = {$author} falls asleep
 rp-need-target = 👤 You must specify a target for this action.
 booru-not-found = 🗨️ No images found for the given tags.
 went-wrong = Something went wrong, try again.
-error = Error: {$error}
+error = Error
 argument-parse-error = **Invalid command arguments.**
     Check the command usage in the help menu.
 nsfw-error = **This command can only be used in NSFW channels.**

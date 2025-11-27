@@ -19,7 +19,7 @@ pub async fn forget(ctx: Context<'_>, #[rest] indexes: String) -> Result<(), Err
 
     match ai::core::remove_prompt_lines(guild_id, &indices_real) {
         Ok(()) => reply_without_ping(ctx, tr!(ctx, "forget-forgot", indices: indices_str)).await?,
-        Err(e) => reply_without_ping(ctx, tr!(ctx, "error", error: e.to_string())).await?,
+        Err(e) => reply_with_error(ctx, e.to_string()).await?,
     };
 
     Ok(())

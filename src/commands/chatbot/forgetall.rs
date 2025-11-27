@@ -17,7 +17,7 @@ pub async fn forgetall(ctx: Context<'_>, confirmation: String) -> Result<(), Err
 
     match ai::core::remove_prompt_file(guild_id) {
         Ok(()) => reply_without_ping(ctx, tr!(ctx, "forgetall-forgot")).await?,
-        Err(e) => reply_without_ping(ctx, tr!(ctx, "error", error: e.to_string())).await?,
+        Err(e) => reply_with_error(ctx, e.to_string()).await?,
     };
 
     Ok(())
