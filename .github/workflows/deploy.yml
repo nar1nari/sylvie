@@ -58,5 +58,5 @@ jobs:
           echo "Launching bot..."
           ssh "${SSH_USER}@${SSH_HOST}" '
             tmux kill-session -t sylv 2>/dev/null || true
-            tmux new-session -d -s sylv "bash -lc '\''cd /home/anon/sylvie && ./sylvie'\''"
+            tmux new-session -d -s sylv -c /home/anon/sylvie ./sylvie
           '
