@@ -188,6 +188,16 @@ sleep = sleep
 sleep-target = {$author} sleeps with {$target}
 sleep-no-target = {$author} falls asleep
 
+ytdlp = ytdlp
+    .description = 📹 Download and send video/audio
+    .url = url
+    .url-description = URL to video or audio
+    .help = Download and send video or audio.
+    Can fetch media from [thousands of sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+    Have file size limit of 10M.
+
+ytdlp-failed = Failed to fetch media.
+
 rp-need-target = 👤 You must specify a target for this action.
 booru-not-found = 🗨️ No images found for the given tags.
 went-wrong = Something went wrong, try again.

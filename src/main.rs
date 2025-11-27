@@ -33,6 +33,7 @@ fn base_commands() -> Vec<Command<Data, Box<dyn Error + Send + Sync>>> {
         admin::clear::clear(),
         chatbot::memory::memory(),
         roleplay::rp(),
+        utilities::ytdlp::ytdlp(),
     ]
 }
 

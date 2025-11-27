@@ -188,6 +188,16 @@ sleep = спать
 sleep-target = {$author} спит с {$target}
 sleep-no-target = {$author} спит
 
+ytdlp = ytdlp
+    .description = 📹 Скачать и отправить видео/аудио
+    .url = url
+    .url-description = URL к видео или аудио
+    .help = Скачать и отправить видео или аудио.
+    Может получать медиа с [тысяч сайтов](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+    Имеет ограничение на размер файла — 10 МБ.
+
+ytdlp-failed = Не удалось получить медиа.
+
 rp-need-target = 👤 Для этого действия нужно указать цель.
 booru-not-found = 🗨️ Изображения с такими тегами не найдены.
 went-wrong = Что-то пошло не так, попробуйте ещё раз.
