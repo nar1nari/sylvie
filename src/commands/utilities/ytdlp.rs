@@ -9,6 +9,7 @@ use std::path::{Path, PathBuf};
 use tokio::process;
 
 const MAX_FILE_SIZE: usize = 10;
+const MAX_BYTES: u64 = 10485760;
 const DOWNLOAD_PATH: &str = "/tmp";
 
 async fn get_filename(url: &str) -> Option<String> {
@@ -66,19 +67,29 @@ pub async fn ytdlp(ctx: Context<'_>, url: String) -> Result<(), Error> {
     let download_path = Path::new(DOWNLOAD_PATH);
     let file_path = download_video(&url, download_path).await;
 
-    if let Some(file_path) = file_path {
-        let attachment = CreateAttachment::path(&file_path).await?;
-        tokio::fs::remove_file(file_path).await.ok();
-        ctx.send(
-            CreateReply::default()
-                .attachment(attachment)
-                .reply(true)
-                .allowed_mentions(CreateAllowedMentions::new()),
-        )
-        .await?;
-    } else {
+    let Some(file_path) = file_path else {
         reply_with_error(ctx, tr!(ctx, "ytdlp-failed")).await?;
+        return Ok(());
+    };
+
+    let size = tokio::fs::metadata(&file_path).await?.len();
+
+    if size >= MAX_BYTES {
+        reply_with_error(ctx, tr!(ctx, "ytdlp-failed")).await?;
+        tokio::fs::remove_file(&file_path).await.ok();
+        return Ok(());
     }
+
+    let attachment = CreateAttachment::path(&file_path).await?;
+    ctx.send(
+        CreateReply::default()
+            .attachment(attachment)
+            .reply(true)
+            .allowed_mentions(CreateAllowedMentions::new()),
+    )
+    .await?;
+
+    tokio::fs::remove_file(file_path).await.ok();
 
     Ok(())
 }
