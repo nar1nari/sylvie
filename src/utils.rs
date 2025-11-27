@@ -36,6 +36,8 @@ pub async fn reply_with_error(
         .send(
             poise::CreateReply::default()
                 .embed(embed)
+                .reply(true)
+                .allowed_mentions(serenity::CreateAllowedMentions::new())
                 .ephemeral(true),
         )
         .await?)
