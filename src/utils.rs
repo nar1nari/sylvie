@@ -1,6 +1,6 @@
+use crate::translation::tr;
 use poise::serenity_prelude as serenity;
 use poise::serenity_prelude::Color;
-use crate::translation::tr;
 
 pub type Error = Box<dyn std::error::Error + Send + Sync>;
 pub type Context<'a> = poise::Context<'a, crate::Data, Error>;
@@ -27,14 +27,15 @@ pub async fn reply_with_error(
     ctx: Context<'_>,
     content: impl Into<String>,
 ) -> Result<poise::ReplyHandle<'_>, Error> {
-    let embed = serenity::CreateEmbed::new().color(ERROR_EMBED_COLOR).title(tr!(ctx, "error")).description(content);
+    let embed = serenity::CreateEmbed::new()
+        .color(ERROR_EMBED_COLOR)
+        .title(tr!(ctx, "error"))
+        .description(content);
 
     Ok(ctx
         .send(
             poise::CreateReply::default()
                 .embed(embed)
-                .reply(true)
-                .allowed_mentions(serenity::CreateAllowedMentions::new())
                 .ephemeral(true),
         )
         .await?)
