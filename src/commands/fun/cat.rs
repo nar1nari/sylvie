@@ -1,5 +1,3 @@
-use poise::serenity_prelude::json::Value;
-
 use crate::translation::tr;
 use crate::utils::*;
 
@@ -25,7 +23,7 @@ pub async fn cat(ctx: Context<'_>) -> Result<(), Error> {
         return Ok(());
     }
 
-    let data: Value = response.json().await?;
+    let data: serde_json::Value = response.json().await?;
 
     if let Some(url) = data[0]["url"].as_str() {
         reply_without_ping(ctx, url).await?;

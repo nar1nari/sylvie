@@ -1,18 +1,18 @@
-use poise::serenity_prelude::{Attachment, User};
+use poise::serenity_prelude as serenity;
 
 pub struct AiRequest {
     pub guild: (u64, String),
-    pub author: User,
+    pub author: serenity::User,
     pub content: String,
-    pub attachments: Vec<Attachment>,
+    pub attachments: Vec<serenity::Attachment>,
 }
 
 impl AiRequest {
     pub fn new(
         guild: (u64, String),
-        author: User,
+        author: serenity::User,
         content: String,
-        attachments: Vec<Attachment>,
+        attachments: Vec<serenity::Attachment>,
     ) -> Self {
         Self {
             guild,

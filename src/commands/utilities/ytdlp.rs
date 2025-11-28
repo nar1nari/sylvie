@@ -1,7 +1,4 @@
-use poise::{
-    CreateReply,
-    serenity_prelude::{CreateAllowedMentions, CreateAttachment},
-};
+use poise::serenity_prelude as serenity;
 
 use crate::translation::tr;
 use crate::utils::*;
@@ -80,14 +77,8 @@ pub async fn ytdlp(ctx: Context<'_>, url: String) -> Result<(), Error> {
         return Ok(());
     }
 
-    let attachment = CreateAttachment::path(&file_path).await?;
-    ctx.send(
-        CreateReply::default()
-            .attachment(attachment)
-            .reply(true)
-            .allowed_mentions(CreateAllowedMentions::new()),
-    )
-    .await?;
+    let attachment = serenity::CreateAttachment::path(&file_path).await?;
+    reply_without_ping(ctx, poise::CreateReply::default().attachment(attachment)).await?;
 
     tokio::fs::remove_file(file_path).await.ok();
 

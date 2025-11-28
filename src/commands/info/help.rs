@@ -1,11 +1,10 @@
-use poise::serenity_prelude::{CommandId, CreateAllowedMentions, CreateEmbed};
-use poise::{Command, CreateReply};
+use poise::serenity_prelude as serenity;
 use std::collections::HashMap;
 
 use crate::translation;
 use crate::{Data, translation::tr, utils::*};
 
-fn format_context_menu_name(command: &Command<Data, Error>) -> Option<String> {
+fn format_context_menu_name(command: &poise::Command<Data, Error>) -> Option<String> {
     let kind = match command.context_menu_action {
         Some(poise::ContextMenuCommandAction::User(_)) => "user",
         Some(poise::ContextMenuCommandAction::Message(_)) => "message",
@@ -24,9 +23,9 @@ fn format_context_menu_name(command: &Command<Data, Error>) -> Option<String> {
 
 fn preformat_subcommands(
     list: &mut String,
-    command: &Command<Data, Error>,
+    command: &poise::Command<Data, Error>,
     prefix: &str,
-    command_ids: &HashMap<String, CommandId>,
+    command_ids: &HashMap<String, serenity::CommandId>,
 ) {
     let prefix = match prefix.find(":") {
         Some(pos) => &prefix[..pos],
@@ -47,7 +46,7 @@ fn preformat_subcommands(
                 subcommand.name,
                 command_ids
                     .get(&command.name)
-                    .unwrap_or(&CommandId::default())
+                    .unwrap_or(&serenity::CommandId::default())
             )
         };
         *list = format!("{} {}", list, command);
@@ -56,8 +55,8 @@ fn preformat_subcommands(
 
 fn preformat_command(
     list: &mut String,
-    command: &Command<Data, Error>,
-    command_ids: &HashMap<String, CommandId>,
+    command: &poise::Command<Data, Error>,
+    command_ids: &HashMap<String, serenity::CommandId>,
 ) {
     let prefix = if command.slash_action.is_some() {
         String::from("/")
@@ -72,13 +71,16 @@ fn preformat_command(
         command.name,
         command_ids
             .get(&command.name)
-            .unwrap_or(&CommandId::default())
+            .unwrap_or(&serenity::CommandId::default())
     );
     *list = format!("{} {}", list, prefix);
     preformat_subcommands(list, command, &prefix, command_ids);
 }
 
-async fn help_single_command(ctx: Context<'_>, command_name: &str) -> Result<CreateEmbed, Error> {
+async fn help_single_command(
+    ctx: Context<'_>,
+    command_name: &str,
+) -> Result<serenity::CreateEmbed, Error> {
     let commands = &ctx.framework().options().commands;
     let mut command = commands.iter().find(|command| {
         if let Some(context_menu_name) = &command.context_menu_name
@@ -101,7 +103,7 @@ async fn help_single_command(ctx: Context<'_>, command_name: &str) -> Result<Cre
         command = Some(c);
     }
     let embed = if let Some(command) = command {
-        let mut embed = CreateEmbed::new()
+        let mut embed = serenity::CreateEmbed::new()
             .color(HELP_EMBED_COLOR)
             .title(command_name);
 
@@ -160,7 +162,7 @@ async fn help_single_command(ctx: Context<'_>, command_name: &str) -> Result<Cre
 
         embed
     } else {
-        CreateEmbed::new()
+        serenity::CreateEmbed::new()
             .color(ERROR_EMBED_COLOR)
             .title(tr!(ctx, "help-title"))
             .field(
@@ -173,8 +175,8 @@ async fn help_single_command(ctx: Context<'_>, command_name: &str) -> Result<Cre
     Ok(embed)
 }
 
-async fn help_all_commands(ctx: Context<'_>) -> Result<CreateEmbed, Error> {
-    let mut categories = HashMap::<Option<&str>, Vec<&Command<_, _>>>::new();
+async fn help_all_commands(ctx: Context<'_>) -> Result<serenity::CreateEmbed, Error> {
+    let mut categories = HashMap::<Option<&str>, Vec<&poise::Command<_, _>>>::new();
 
     for cmd in &ctx.framework().options().commands {
         if let Some(category) = cmd.category.as_deref() {
@@ -191,7 +193,7 @@ async fn help_all_commands(ctx: Context<'_>) -> Result<CreateEmbed, Error> {
         .map(|cmd| (cmd.name.clone(), cmd.id))
         .collect();
 
-    let mut embed = CreateEmbed::new()
+    let mut embed = serenity::CreateEmbed::new()
         .color(HELP_EMBED_COLOR)
         .title(tr!(ctx, "help-title"));
 
@@ -235,13 +237,7 @@ pub async fn help(ctx: Context<'_>, command: Option<String>) -> Result<(), Error
     };
     embed = embed.field("", tr!(ctx, "help-footer"), false);
 
-    ctx.send(
-        CreateReply::default()
-            .embed(embed)
-            .reply(true)
-            .allowed_mentions(CreateAllowedMentions::new()),
-    )
-    .await?;
+    reply_without_ping(ctx, poise::CreateReply::default().embed(embed)).await?;
 
     Ok(())
 }

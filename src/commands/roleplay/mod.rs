@@ -1,9 +1,5 @@
-use poise::{
-    CreateReply,
-    serenity_prelude::{self as serenity, CreateEmbed},
-};
+use poise::serenity_prelude as serenity;
 use rand::seq::IndexedRandom;
-use reqwest::StatusCode;
 
 use crate::{translation::tr, utils::*};
 
@@ -33,7 +29,7 @@ impl<'a> Action<'a> {
             let resp = reqwest::Client::new().head(&url).send().await;
 
             if let Ok(r) = resp
-                && r.status() == StatusCode::OK
+                && r.status() == reqwest::StatusCode::OK
             {
                 urls.push(url);
             } else {
@@ -86,7 +82,9 @@ pub async fn run_rp_action(
         return Ok(());
     }
 
-    let mut embed = CreateEmbed::new().color(DEFAULT_EMBED_COLOR).image(gif);
+    let mut embed = serenity::CreateEmbed::new()
+        .color(DEFAULT_EMBED_COLOR)
+        .image(gif);
 
     embed = if &target == ctx.author() {
         embed.title(action.msg_no_target(ctx, ctx.author().display_name()))
@@ -94,7 +92,7 @@ pub async fn run_rp_action(
         embed.title(action.msg_target(ctx, ctx.author().display_name(), target.display_name()))
     };
 
-    ctx.send(CreateReply::default().embed(embed)).await?;
+    reply_without_ping(ctx, poise::CreateReply::default().embed(embed)).await?;
 
     Ok(())
 }

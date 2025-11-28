@@ -1,5 +1,4 @@
 use rand::seq::IndexedRandom;
-use serde_json::Value;
 
 use crate::translation::tr;
 use crate::utils::*;
@@ -30,7 +29,7 @@ async fn get_random_image(ctx: Context<'_>, tags: &str) -> Result<String, String
         return Err(tr!(ctx, "went-wrong"));
     }
 
-    let posts: Value = response.json().await.map_err(|_| tr!(ctx, "went-wrong"))?;
+    let posts: serde_json::Value = response.json().await.map_err(|_| tr!(ctx, "went-wrong"))?;
 
     let items = posts
         .as_array()
@@ -44,7 +43,7 @@ async fn get_random_image(ctx: Context<'_>, tags: &str) -> Result<String, String
         .ok_or_else(|| tr!(ctx, "booru-not-found"))?;
     let url = random_post
         .get("sample_url")
-        .and_then(Value::as_str)
+        .and_then(serde_json::Value::as_str)
         .ok_or_else(|| tr!(ctx, "booru-not-found"))?;
 
     Ok(url.to_string())

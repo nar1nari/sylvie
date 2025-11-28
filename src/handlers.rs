@@ -1,9 +1,7 @@
 use crate::{Data, commands::chatbot, translation::tr, utils::*};
 use poise::serenity_prelude as serenity;
 
-pub async fn error_handler(
-    error: poise::FrameworkError<'_, Data, Box<dyn std::error::Error + Send + Sync>>,
-) {
+pub async fn error_handler(error: poise::FrameworkError<'_, Data, Error>) {
     match error {
         poise::FrameworkError::ArgumentParse { ctx, .. } => {
             reply_with_error(

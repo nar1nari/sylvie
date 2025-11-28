@@ -1,5 +1,4 @@
 use rand::seq::IndexedRandom;
-use serde_json::Value;
 
 use crate::translation::tr;
 use crate::utils::*;
@@ -26,7 +25,7 @@ async fn get_random_image(ctx: Context<'_>, tags: &str) -> Result<String, String
         return Err(tr!(ctx, "went-wrong"));
     }
 
-    let posts: Value = response.json().await.map_err(|_| tr!(ctx, "went-wrong"))?;
+    let posts: serde_json::Value = response.json().await.map_err(|_| tr!(ctx, "went-wrong"))?;
 
     let items = posts
         .as_array()
@@ -39,8 +38,10 @@ async fn get_random_image(ctx: Context<'_>, tags: &str) -> Result<String, String
         .choose(&mut rng)
         .ok_or_else(|| tr!(ctx, "booru-not-found"))?;
 
-    let directory = random_post.get("directory").and_then(Value::as_i64);
-    let image = random_post.get("image").and_then(Value::as_str);
+    let directory = random_post
+        .get("directory")
+        .and_then(serde_json::Value::as_i64);
+    let image = random_post.get("image").and_then(serde_json::Value::as_str);
 
     let url = match (directory, image) {
         (Some(dir), Some(img)) => format!("https://safebooru.org/images/{}/{}", dir, img),

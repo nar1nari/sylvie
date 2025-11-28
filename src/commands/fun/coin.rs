@@ -1,9 +1,8 @@
 use crate::translation::tr;
 use crate::utils::*;
-use poise::ChoiceParameter;
 use rand::Rng;
 
-#[derive(ChoiceParameter, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(poise::ChoiceParameter, Debug, Clone, Copy, PartialEq, Eq)]
 enum Side {
     Heads,
     Tails,

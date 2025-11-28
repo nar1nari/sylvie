@@ -1,6 +1,5 @@
 use std::error::Error;
 
-use poise::Command;
 use poise::serenity_prelude::{self as serenity};
 use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
@@ -18,7 +17,7 @@ pub struct Data {
     translations: translation::Translations,
 }
 
-fn base_commands() -> Vec<Command<Data, Box<dyn Error + Send + Sync>>> {
+fn base_commands() -> Vec<poise::Command<Data, Box<dyn Error + Send + Sync>>> {
     vec![
         fun::cat::cat(),
         fun::coin::coin(),

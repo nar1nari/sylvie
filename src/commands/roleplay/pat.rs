@@ -1,4 +1,4 @@
-use poise::serenity_prelude::User;
+use poise::serenity_prelude as serenity;
 
 use crate::{
     commands::roleplay::{Action, run_rp_action},
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[poise::command(slash_command, prefix_command, category = "Roleplay")]
-pub async fn pat(ctx: Context<'_>, target: Option<User>) -> Result<(), Error> {
+pub async fn pat(ctx: Context<'_>, target: Option<serenity::User>) -> Result<(), Error> {
     let action = Action::new("pat", false);
 
     ctx.defer().await?;
