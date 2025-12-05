@@ -1,4 +1,4 @@
-use poise::serenity_prelude::GetMessages;
+use poise::serenity_prelude as serenity;
 
 use crate::{translation::tr, utils::*};
 
@@ -28,7 +28,7 @@ pub async fn clear(ctx: Context<'_>, amount: u8) -> Result<(), Error> {
         }
     };
 
-    let builder = GetMessages::new().before(last_message_id).limit(amount);
+    let builder = serenity::GetMessages::new().before(last_message_id).limit(amount);
     let messages = channel.messages(&ctx.http(), builder).await?;
     channel.delete_messages(&ctx.http(), messages).await?;
 
@@ -36,7 +36,7 @@ pub async fn clear(ctx: Context<'_>, amount: u8) -> Result<(), Error> {
         p.msg.delete(&ctx.http()).await?
     }
 
-    let msg = reply_without_ping(ctx, tr!(ctx, "clear-deleted")).await?;
+    let msg = reply_without_ping(ctx, tr!(ctx, "clear-deleted", amount: amount)).await?;
 
     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
     msg.delete(ctx).await?;
