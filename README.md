@@ -2,8 +2,6 @@
 
 **Sylvie** is a public, completely free and open-source Discord bot written in Rust. 
 
----
-
 ## What Sylvie Can Do
 
 ### Commands
@@ -29,8 +27,6 @@
 
 - Coming soon
 
----
-
 ## AI Chatbot (Core Feature)
 
 This is the whole point of Sylvie.
@@ -39,8 +35,6 @@ This is the whole point of Sylvie.
 - Remembers conversation context across messages
 - Fine control over what is stored in memory
 - Designed for long-term, natural interaction in servers
-
----
 
 ## Languages
 
@@ -52,13 +46,9 @@ Currently supported:
 Translation system is simple and contributor-friendly
 New languages are always welcome.
 
----
-
 ## ⚠️ Major rewrite still in progress ⚠️
 
 Original version was written in Python and current version is a full rewrite in Rust. Some parts are messy, experimental, or incomplete. APIs and structure may and will change.
-
----
 
 ## Contributing
 
@@ -79,8 +69,6 @@ Contributions are welcome and appreciated.
 - Fix wording or UX issues
 
 If you see something dumb, feel free to fix it.
-
----
 
 ## Credits
 
