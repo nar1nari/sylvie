@@ -1,3 +1,8 @@
+> [!WARNING]  
+> This repository contains an old version of Sylvie; the current version was rewritten and currently have closed source code.
+> 
+> This code is no longer maintained and may stop working with newer versions of the crates. However, you can still use it as an example of how to create a Discord bot in Rust. If you create a fork, please retain the original license.
+
 # Sylvie - Multifunctional Discord Bot in Rust
 
 **Sylvie** is a public, completely free and open-source Discord bot written in Rust. 
@@ -45,30 +50,6 @@ Currently supported:
 
 Translation system is simple and contributor-friendly
 New languages are always welcome.
-
-## ⚠️ Major rewrite still in progress ⚠️
-
-Original version was written in Python and current version is a full rewrite in Rust. Some parts are messy, experimental, or incomplete. APIs and structure may and will change.
-
-## Contributing
-
-Contributions are welcome and appreciated.
-
-### If you know Rust you can
-
-- Improve architecture
-- Refactor messy code
-- Suggest better patterns where things are ugly
-- Optimize or clean up existing logic 
-
-### If you don't know Rust, you can still help
-
-- Add new translations
-	 See: [translations](./translations/)
-- Improve existing language files
-- Fix wording or UX issues
-
-If you see something dumb, feel free to fix it.
 
 ## Credits
 
